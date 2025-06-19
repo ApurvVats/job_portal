@@ -4,10 +4,18 @@ import { applyJob, getApplicants, getAppliedJobs, updateStatus } from "../contro
  
 const router = express.Router();
 
-router.route("/apply/:id").get(applyJob);
-router.route("/get").get( getAppliedJobs);
-router.route("/:id/applicants").get( getApplicants);
-router.route("/status/:id/update").post(updateStatus);
+
+// Apply for a job (should be POST, not GET)
+router.route("/apply/:id").post(isAuthenticated, applyJob);
+
+// Get all jobs the current user has applied to
+router.route("/get").get(isAuthenticated, getAppliedJobs);
+
+// Get all applicants for a specific job
+router.route("/:id/applicants").get(isAuthenticated, getApplicants);
+
+// Update application status
+router.route("/status/:id/update").post(isAuthenticated, updateStatus);
  
 
 export default router;
